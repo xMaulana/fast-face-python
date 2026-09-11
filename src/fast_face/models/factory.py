@@ -1,7 +1,9 @@
+import os
 from typing import Type
 
 from .base import BaseFaceModel
 from .yunet import YuNet
+from ..schema import MODEL_FILENAMES
 
 
 class FaceModelFactory:
@@ -29,6 +31,10 @@ class FaceModelFactory:
             raise ValueError(
                 f"Model type '{model_type}' is not supported. Supported models: {list(cls._models.keys())}"
             )
+
+        if "model_path" not in kwargs:
+            filename = MODEL_FILENAMES.get(model_type, f"{model_type.lower()}.onnx")
+            kwargs["model_path"] = os.path.join(os.path.dirname(os.path.abspath(__file__)), filename)
 
         model_class = cls._models[model_type]
         return model_class(**kwargs)

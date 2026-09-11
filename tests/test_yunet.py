@@ -7,16 +7,7 @@ from fast_face.models.factory import FaceModelFactory
 
 
 def test_yunet_batched_inference():
-    model_path = os.getenv(
-        "FAST_FACE_DIR_PATH",
-        os.path.join(
-            os.path.dirname(os.path.abspath(__file__)),
-            "../src/fast_face/models/yunet.onnx",
-        ),
-    )
-
-
-    model = FaceModelFactory.get_model("YUNET", model_path=model_path, top_k=500)
+    model = FaceModelFactory.get_model("YUNET", top_k=500)
 
     img1 = np.random.randint(0, 255, (480, 640, 3), dtype=np.uint8)
     img2 = np.random.randint(0, 255, (720, 1280, 3), dtype=np.uint8)

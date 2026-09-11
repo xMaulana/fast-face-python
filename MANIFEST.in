@@ -1,1 +1,6 @@
 include src/fast_face/models/*.onnx
+
+prune .uv_cache
+prune .ruff_cache
+prune .pytest_cache
+prune .venv

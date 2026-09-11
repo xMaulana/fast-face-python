@@ -28,10 +28,7 @@ class YuNet(BaseFaceModel):
 
     def __init__(
         self,
-        model_path: str = os.getenv(
-            "FAST_FACE_DIR_PATH",
-            os.path.join(os.path.dirname(os.path.abspath(__file__)), "yunet.onnx"),
-        ),
+        model_path: str,
         input_size: tuple = (320, 320),
         conf_threshold: float = 0.6,
         nms_threshold: float = 0.4,
