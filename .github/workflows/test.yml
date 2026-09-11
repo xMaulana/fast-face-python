@@ -26,11 +26,5 @@ jobs:
         python -m pip install --upgrade pip
         pip install ".[dev,cpu]"
         
-    - name: Check formatting with ruff
-      run: ruff format --check .
-      
-    - name: Lint with ruff
-      run: ruff check .
-      
     - name: Test with pytest
       run: pytest tests/

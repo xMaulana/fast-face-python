@@ -65,6 +65,10 @@ venv.bak/
 
 # UV Cache
 .uv_cache/
+uv.lock
+
+# Ruff Cache
+.ruff_cache/
 
 # ONNX models
 src/fast_face/models/*.onnx 

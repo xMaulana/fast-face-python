@@ -34,7 +34,7 @@ class FaceModelFactory:
         return model_class(**kwargs)
 
     @classmethod
-    def register_model(cls, model_type: str, model_class: Type[BaseFaceModel]):
+    def register_model(cls, model_type: str, model_class: type[BaseFaceModel]):
         """Register a custom model with the factory.
 
         Args:

@@ -1,9 +1,9 @@
 # Adapted from https://github.com/elliottzheng/batch-face
-from typing import Optional
+from math import ceil
+from typing import Any, Dict, List, Optional, Tuple, Union
+
 import cv2
 import numpy as np
-from math import ceil
-from typing import Union, Tuple, List, Dict, Any
 
 FACIAL_REF_POINT = [
     [30.29459953, 51.69630051],
@@ -102,8 +102,8 @@ def normalize(
 
 def get_priorbox(
     image_size: tuple[int, int] = (640, 640),
-    min_sizes: list[list[int]] = None,
-    steps: list[int] = None,
+    min_sizes: list[list[int]] | None = None,
+    steps: list[int] | None = None,
     clip: bool = False,
 ) -> np.ndarray:
     """Generate prior anchor boxes for ONNX model inference.
@@ -157,7 +157,7 @@ def get_priorbox(
 def decode(
     loc: np.ndarray,
     priors: np.ndarray,
-    variances: Union[Tuple[float, float], List[float]] = (0.1, 0.2),
+    variances: tuple[float, float] | list[float] = (0.1, 0.2),
 ) -> np.ndarray:
     """Decode bounding box predictions using prior boxes and variance scaling.
 
@@ -184,7 +184,7 @@ def decode(
 def decode_landmark(
     pre: np.ndarray,
     priors: np.ndarray,
-    variances: Union[Tuple[float, float], List[float]] = (0.1, 0.2),
+    variances: tuple[float, float] | list[float] = (0.1, 0.2),
 ) -> np.ndarray:
     """Decode facial landmark location predictions using prior boxes and variance scaling.
 
@@ -209,7 +209,7 @@ def decode_landmark(
     return landms
 
 
-def nms(dets: np.ndarray, thresh: float) -> List[int]:
+def nms(dets: np.ndarray, thresh: float) -> list[int]:
     """Perform Non-Maximum Suppression (NMS) on bounding boxes.
 
     Args:
@@ -249,7 +249,7 @@ def nms(dets: np.ndarray, thresh: float) -> List[int]:
     return keep
 
 
-def parse_det(det: np.ndarray) -> Dict[str, Any]:
+def parse_det(det: np.ndarray) -> dict[str, Any]:
     """Parse a raw detection array into a structured dictionary.
 
     Args:
@@ -274,9 +274,9 @@ def parse_det(det: np.ndarray) -> Dict[str, Any]:
 
 def crop_face(
     img: np.ndarray,
-    det: Union[np.ndarray, Dict[str, Any], List[Dict[str, Any]]],
+    det: np.ndarray | dict[str, Any] | list[dict[str, Any]],
     return_dict: bool = False,
-) -> Tuple[List[np.ndarray], Union[np.ndarray, List[Dict[str, Any]]]]:
+) -> tuple[list[np.ndarray], np.ndarray | list[dict[str, Any]]]:
     """Crop face(s) from image and adjust landmarks relative to the cropped bounding box.
 
     Args:
@@ -404,7 +404,7 @@ def _get_similarity_transform(src_pts: np.ndarray, dst_pts: np.ndarray) -> np.nd
 
 
 def _get_reference_facial_points(
-    output_size: Optional[Tuple[int, int]] = None, default_square: bool = False
+    output_size: tuple[int, int] | None = None, default_square: bool = False
 ) -> np.ndarray:
     """Get reference facial points scaled to the given output size.
 
@@ -441,8 +441,8 @@ def _get_reference_facial_points(
 
 def align_face(
     img: np.ndarray,
-    landmarks: Union[np.ndarray, Dict[str, Any]],
-    align_size: Tuple[int, int] = (112, 112),
+    landmarks: np.ndarray | dict[str, Any],
+    align_size: tuple[int, int] = (112, 112),
 ) -> np.ndarray:
     """Align a face image based on facial reference points.
 

@@ -1,7 +1,8 @@
 import os
+from typing import List, Optional
+
 import numpy as np
 import onnxruntime as ort
-from typing import List, Optional
 
 from ..schema import ProviderType
 
@@ -12,9 +13,11 @@ class ONNXSession:
         model_path: str = os.path.join(
             os.path.dirname(os.path.abspath(__file__)), "mobilenet_retinaface.onnx"
         ),
-        providers: List[ProviderType] = ["CPUExecutionProvider"],
-        sess_options: Optional[ort.SessionOptions] = None,
+        providers: list[ProviderType] | None = None,
+        sess_options: ort.SessionOptions | None = None,
     ):
+        if providers is None:
+            providers = ["CPUExecutionProvider"]
         self.session = ort.InferenceSession(
             model_path, providers=providers, sess_options=sess_options
         )

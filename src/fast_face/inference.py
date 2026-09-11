@@ -1,18 +1,19 @@
 import os
+from typing import Any, Dict, List, Literal, Optional, Tuple, Union
+
 import cv2
 import numpy as np
-from typing import List, Union, Tuple, Dict, Any, Literal, Optional
 from onnxruntime import SessionOptions
 
 from .models.session import ONNXSession, ProviderType
 from .tools import (
-    resize,
-    normalize,
-    get_priorbox,
     decode,
     decode_landmark,
+    get_priorbox,
     nms,
+    normalize,
     parse_det,
+    resize,
 )
 
 
@@ -27,9 +28,11 @@ class Inference:
         variance: tuple[float, float] = (0.1, 0.2),
         return_original: bool = True,
         model: Literal["MOBILENET", "RESNET50"] = "MOBILENET",
-        providers: List[ProviderType] = ["CPUExecutionProvider"],
-        sess_options: Optional[SessionOptions] = None,
+        providers: list[ProviderType] | None = None,
+        sess_options: SessionOptions | None = None,
     ):
+        if providers is None:
+            providers = ["CPUExecutionProvider"]
         assert model in ["MOBILENET", "RESNET50"]
         self.confidence_threshold = confidence_threshold
         self.top_k = top_k
@@ -74,9 +77,9 @@ class Inference:
 
     def detect(
         self,
-        imgs: Union[str, List[str], np.ndarray, List[np.ndarray]],
+        imgs: str | list[str] | np.ndarray | list[np.ndarray],
         return_dict: bool = False,
-    ) -> List[Union[np.ndarray, List[Dict[str, Any]]]]:
+    ) -> list[np.ndarray | list[dict[str, Any]]]:
         """Run face detection inference on input images.
 
         Args:
@@ -137,8 +140,8 @@ class Inference:
         loc: np.ndarray,
         conf: np.ndarray,
         landms: np.ndarray,
-        original_shape: Tuple[int, int],
-        preprocessed_shape: Tuple[int, int],
+        original_shape: tuple[int, int],
+        preprocessed_shape: tuple[int, int],
     ) -> np.ndarray:
         """Decode model outputs, apply NMS, and scale coordinates back to the original image.
 

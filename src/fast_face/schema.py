@@ -1,3 +1,3 @@
-from typing import Union, Tuple, Dict, Any
+from typing import Any, Dict, Tuple, Union
 
-ProviderType = Union[str, Tuple[str, Dict[str, Any]]]
+ProviderType = Union[str, tuple[str, dict[str, Any]]]

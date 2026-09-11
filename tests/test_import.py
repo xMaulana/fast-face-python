@@ -6,4 +6,4 @@ def test_import():
         assert fast_face is not None
         assert models is not None
     except ImportError as e:
-        assert False, f"Failed to import fast_face: {e}"
+        raise AssertionError(f"Failed to import fast_face: {e}")

@@ -1,12 +1,13 @@
+from abc import ABC, abstractmethod
+from typing import Any, Dict, List, Optional, Tuple, Union
+
 import cv2
 import numpy as np
-from abc import ABC, abstractmethod
-from typing import List, Union, Tuple, Dict, Any, Optional
 import onnxruntime as ort
 
-from .session import ONNXSession
 from ..schema import ProviderType
 from ..tools import nms, parse_det
+from .session import ONNXSession
 
 
 class BaseFaceModel(ABC):
@@ -17,9 +18,11 @@ class BaseFaceModel(ABC):
         nms_threshold: float = 0.4,
         top_k: int = 5000,
         keep_top_k: int = 1000,
-        providers: List[ProviderType] = ["CPUExecutionProvider"],
-        sess_options: Optional[ort.SessionOptions] = None,
+        providers: list[ProviderType] | None = None,
+        sess_options: ort.SessionOptions | None = None,
     ):
+        if providers is None:
+            providers = ["CPUExecutionProvider"]
         self.conf_threshold = conf_threshold
         self.nms_threshold = nms_threshold
         self.top_k = top_k
@@ -32,23 +35,21 @@ class BaseFaceModel(ABC):
     @abstractmethod
     def preprocess(self, imgs: np.ndarray) -> np.ndarray:
         """Preprocess images for the specific model."""
-        pass
 
     @abstractmethod
     def post_process(
         self,
-        outputs: List[np.ndarray],
-        original_shapes: List[Tuple[int, int]],
-        preprocessed_shape: Tuple[int, int],
-    ) -> List[np.ndarray]:
+        outputs: list[np.ndarray],
+        original_shapes: list[tuple[int, int]],
+        preprocessed_shape: tuple[int, int],
+    ) -> list[np.ndarray]:
         """Post-process ONNX outputs to bounding boxes, confidence, and landmarks."""
-        pass
 
     def detect(
         self,
-        imgs: Union[str, List[str], np.ndarray, List[np.ndarray]],
+        imgs: str | list[str] | np.ndarray | list[np.ndarray],
         return_dict: bool = False,
-    ) -> List[Union[np.ndarray, List[Dict[str, Any]]]]:
+    ) -> list[np.ndarray | list[dict[str, Any]]]:
         """Run face detection inference on input images."""
         original_shapes = []
         if isinstance(imgs, str):

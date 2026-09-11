@@ -1,10 +1,11 @@
 import os
-import numpy as np
-import cv2
 from typing import List, Tuple
 
-from .base import BaseFaceModel
+import cv2
+import numpy as np
+
 from ..schema import ProviderType
+from .base import BaseFaceModel
 
 
 class YuNet(BaseFaceModel):
@@ -36,9 +37,11 @@ class YuNet(BaseFaceModel):
         nms_threshold: float = 0.4,
         top_k: int = 5000,
         keep_top_k: int = 1000,
-        providers: List[ProviderType] = ["CPUExecutionProvider"],
+        providers: list[ProviderType] | None = None,
         **kwargs,
     ):
+        if providers is None:
+            providers = ["CPUExecutionProvider"]
         super().__init__(
             model_path=model_path,
             conf_threshold=conf_threshold,
@@ -55,11 +58,11 @@ class YuNet(BaseFaceModel):
         self._pad_w = ((self._input_w - 1) // self.DIVISOR + 1) * self.DIVISOR
         self._pad_h = ((self._input_h - 1) // self.DIVISOR + 1) * self.DIVISOR
 
-    def set_input_size(self, input_size: Tuple[int, int]):
+    def set_input_size(self, input_size: tuple[int, int]):
         self._input_w, self._input_h = input_size
         self._update_pad_size()
 
-    def preprocess(self, imgs: List[np.ndarray]) -> np.ndarray:
+    def preprocess(self, imgs: list[np.ndarray]) -> np.ndarray:
         preprocessed_imgs = []
         for img in imgs:
             h, w = img.shape[:2]
@@ -92,10 +95,10 @@ class YuNet(BaseFaceModel):
 
     def post_process(
         self,
-        outputs: List[np.ndarray],
-        original_shapes: List[Tuple[int, int]],
-        preprocessed_shape: Tuple[int, int],
-    ) -> List[np.ndarray]:
+        outputs: list[np.ndarray],
+        original_shapes: list[tuple[int, int]],
+        preprocessed_shape: tuple[int, int],
+    ) -> list[np.ndarray]:
         batch_size = outputs[0].shape[0]
         h, w = preprocessed_shape
         priors = self._generate_priors(h, w)
