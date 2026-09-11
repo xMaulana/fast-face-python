@@ -1,0 +1,1 @@
+ProviderType = Union[str, Tuple[str, Dict[str, Any]]]

@@ -1,9 +1,9 @@
 import os
 import numpy as np
 import onnxruntime as ort
-from typing import List, Union, Tuple, Dict, Any, Optional
+from typing import List, Optional
 
-ProviderType = Union[str, Tuple[str, Dict[str, Any]]]
+from ..schema import ProviderType
 
 class ONNXSession:
     def __init__(
