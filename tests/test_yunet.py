@@ -15,8 +15,6 @@ def test_yunet_batched_inference():
         ),
     )
 
-    if not os.path.exists(model_path):
-        pytest.skip(f"Skipping test because model not found at {model_path}")
 
     model = FaceModelFactory.get_model("YUNET", model_path=model_path, top_k=500)
 
