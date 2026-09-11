@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fast-face-python"
+version = "0.1.0"
+description = "Fast and easy face detection using ONNX runtime."
+authors = [
+  { name="xMaulana" },
+]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy",
+    "Pillow",
+    "opencv-python",
+]
+
+[project.optional-dependencies]
+cpu = [
+    "onnxruntime>=1.24.3",
+]
+gpu = [
+    "onnxruntime-gpu>=1.24.3, <=1.26.1",
+    "nvidia-cudnn-cu12",
+    "nvidia-cublas-cu12",
+    "nvidia-cuda-runtime-cu12"
+]
+openvino = [
+    "onnxruntime-openvino>=1.24.1"
+]
+dev = [
+    "pytest",
+    "ruff",
+    "build",
+    "twine"
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+packages = ["fast_face", "fast_face.models"]
+
+[tool.setuptools.package-data]
+fast_face = ["models/*.onnx"]
+
+[tool.uv]
+cache-dir = ".uv_cache"
