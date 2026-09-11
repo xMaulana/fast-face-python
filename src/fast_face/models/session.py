@@ -4,6 +4,7 @@ from typing import List, Optional
 import numpy as np
 import onnxruntime as ort
 
+
 from ..schema import ProviderType
 
 
@@ -16,10 +17,6 @@ class ONNXSession:
         providers: list[ProviderType] | None = None,
         sess_options: ort.SessionOptions | None = None,
     ):
-        if not os.path.exists(model_path):
-            from .downloader import download_model
-            model_filename = os.path.basename(model_path)
-            download_model(model_filename, model_path)
 
         if providers is None:
             providers = ["CPUExecutionProvider"]

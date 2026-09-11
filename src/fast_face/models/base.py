@@ -1,10 +1,12 @@
 from abc import ABC, abstractmethod
 from typing import Any, Dict, List, Optional, Tuple, Union
 
+import os
 import cv2
 import numpy as np
 import onnxruntime as ort
 
+from .downloader import download_model
 from ..schema import ProviderType
 from ..tools import nms, parse_det
 from .session import ONNXSession
@@ -27,6 +29,11 @@ class BaseFaceModel(ABC):
         self.nms_threshold = nms_threshold
         self.top_k = top_k
         self.keep_top_k = keep_top_k
+        if not os.path.exists(model_path):
+            
+            model_filename = os.path.basename(model_path)
+            download_model(model_filename, model_path)
+            
         self.session = ONNXSession(
             model_path=model_path, providers=providers, sess_options=sess_options
         )

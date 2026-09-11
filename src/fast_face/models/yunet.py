@@ -110,23 +110,27 @@ class YuNet(BaseFaceModel):
 
         for i in range(3):
             cls_out = outputs[i]
-            cls_out = cls_out.reshape((batch_size, cls_out.shape[1], -1)).transpose(
-                (0, 2, 1)
-            )
-            if cls_out.shape[-1] == 2:
+            if len(cls_out.shape) == 3 and cls_out.shape[-1] == 2:
                 cls_out = cls_out[:, :, 1:2]
+            elif len(cls_out.shape) > 3:
+                cls_out = cls_out.reshape((batch_size, cls_out.shape[1], -1)).transpose((0, 2, 1))
+                if cls_out.shape[-1] == 2:
+                    cls_out = cls_out[:, :, 1:2]
             cls_scores.append(cls_out)
 
             obj_out = outputs[i + 3]
-            obj_out = obj_out.reshape((batch_size, 1, -1)).transpose((0, 2, 1))
+            if len(obj_out.shape) > 3:
+                obj_out = obj_out.reshape((batch_size, 1, -1)).transpose((0, 2, 1))
             obj_scores.append(obj_out)
 
             bbox_out = outputs[i + 6]
-            bbox_out = bbox_out.reshape((batch_size, 4, -1)).transpose((0, 2, 1))
+            if len(bbox_out.shape) > 3:
+                bbox_out = bbox_out.reshape((batch_size, 4, -1)).transpose((0, 2, 1))
             bboxes.append(bbox_out)
 
             kps_out = outputs[i + 9]
-            kps_out = kps_out.reshape((batch_size, 10, -1)).transpose((0, 2, 1))
+            if len(kps_out.shape) > 3:
+                kps_out = kps_out.reshape((batch_size, 10, -1)).transpose((0, 2, 1))
             kpss.append(kps_out)
 
         cls_scores = np.concatenate(cls_scores, axis=1)
