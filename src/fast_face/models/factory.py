@@ -1,12 +1,12 @@
 from typing import Type
-import os
 
 from .base import BaseFaceModel
 from .yunet import YuNet
 
+
 class FaceModelFactory:
     """Factory to instantiate face detection models."""
-    
+
     _models = {
         "YUNET": YuNet,
         # "RETINAFACE": RetinaFace, # To be implemented
@@ -16,25 +16,27 @@ class FaceModelFactory:
     @classmethod
     def get_model(cls, model_type: str, **kwargs) -> BaseFaceModel:
         """Get an instance of a face detection model.
-        
+
         Args:
             model_type (str): The type of model to instantiate (e.g., "YUNET").
             **kwargs: Arguments to pass to the model's constructor.
-            
+
         Returns:
             BaseFaceModel: An instance of the requested face model.
         """
         model_type = model_type.upper()
         if model_type not in cls._models:
-            raise ValueError(f"Model type '{model_type}' is not supported. Supported models: {list(cls._models.keys())}")
-            
+            raise ValueError(
+                f"Model type '{model_type}' is not supported. Supported models: {list(cls._models.keys())}"
+            )
+
         model_class = cls._models[model_type]
         return model_class(**kwargs)
 
     @classmethod
     def register_model(cls, model_type: str, model_class: Type[BaseFaceModel]):
         """Register a custom model with the factory.
-        
+
         Args:
             model_type (str): The identifier for the model.
             model_class (Type[BaseFaceModel]): The model class.
