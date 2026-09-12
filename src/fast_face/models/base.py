@@ -29,11 +29,7 @@ class BaseFaceModel(ABC):
         self.nms_threshold = nms_threshold
         self.top_k = top_k
         self.keep_top_k = keep_top_k
-        if not os.path.exists(model_path):
-            
-            model_filename = os.path.basename(model_path)
-            download_model(model_filename, model_path)
-            
+
         self.session = ONNXSession(
             model_path=model_path, providers=providers, sess_options=sess_options
         )
