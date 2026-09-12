@@ -16,6 +16,7 @@ dependencies = [
     "Pillow",
     "opencv-python",
     "pydantic-settings>=2.15.0",
+    "tqdm>=4.70.1",
 ]
 
 [project.optional-dependencies]
