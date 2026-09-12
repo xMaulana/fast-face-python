@@ -42,8 +42,5 @@ dev = [
 package-dir = {"" = "src"}
 packages = ["fast_face", "fast_face.models"]
 
-[tool.setuptools.package-data]
-fast_face = ["models/*.onnx"]
-
 [tool.uv]
 cache-dir = ".uv_cache"

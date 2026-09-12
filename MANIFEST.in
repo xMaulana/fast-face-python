@@ -1,4 +1,4 @@
-include src/fast_face/models/*.onnx
+global-exclude *.onnx
 
 prune .uv_cache
 prune .ruff_cache
