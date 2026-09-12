@@ -1,12 +1,11 @@
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
 import os
 import cv2
 import numpy as np
 import onnxruntime as ort
 
-from .downloader import download_model
 from ..schema import ProviderType
 from ..tools import nms, parse_det
 from .session import ONNXSession

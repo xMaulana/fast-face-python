@@ -1,9 +1,11 @@
 import os
-from typing import Type
+from typing import Type, Union
 
 from .base import BaseFaceModel
+from .base_recognition import BaseRecognitionModel
 from .yunet import YuNet
 from .retinaface import RetinaFace
+from .adaface import AdaFace
 from .downloader import download_model
 from ..schema import MODEL_FILENAMES
 
@@ -15,19 +17,22 @@ class FaceModelFactory:
         "YUNET": YuNet,
         "RETINAFACE_MOBILENET": RetinaFace,
         "RETINAFACE_RESNET50": RetinaFace,
+        "ADAFACE_IR101": AdaFace,
+        "ADAFACE_IR50": AdaFace,
+        "ADAFACE_IR18": AdaFace,
         # "SCRFD": SCRFD, # To be implemented
     }
 
     @classmethod
-    def get_model(cls, model_type: str, **kwargs) -> BaseFaceModel:
-        """Get an instance of a face detection model.
+    def get_model(cls, model_type: str, **kwargs) -> Union[BaseFaceModel, BaseRecognitionModel]:
+        """Get an instance of a face detection or recognition model.
 
         Args:
-            model_type (str): The type of model to instantiate (e.g., "YUNET").
+            model_type (str): The type of model to instantiate (e.g., "YUNET", "ADAFACE_IR50").
             **kwargs: Arguments to pass to the model's constructor.
 
         Returns:
-            BaseFaceModel: An instance of the requested face model.
+            Union[BaseFaceModel, BaseRecognitionModel]: An instance of the requested model.
         """
         model_type = model_type.upper()
         if model_type not in cls._models:
@@ -41,8 +46,6 @@ class FaceModelFactory:
 
         model_path = kwargs["model_path"]
         if not os.path.exists(model_path):
-            
-            # Ensure the directory exists before downloading
             os.makedirs(os.path.dirname(model_path), exist_ok=True)
             download_model(canonical_filename, model_path)
 
