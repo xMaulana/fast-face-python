@@ -1,6 +1,3 @@
-import os
-from typing import List, Tuple
-
 import cv2
 import numpy as np
 
@@ -110,7 +107,9 @@ class YuNet(BaseFaceModel):
             if len(cls_out.shape) == 3 and cls_out.shape[-1] == 2:
                 cls_out = cls_out[:, :, 1:2]
             elif len(cls_out.shape) > 3:
-                cls_out = cls_out.reshape((batch_size, cls_out.shape[1], -1)).transpose((0, 2, 1))
+                cls_out = cls_out.reshape((batch_size, cls_out.shape[1], -1)).transpose(
+                    (0, 2, 1)
+                )
                 if cls_out.shape[-1] == 2:
                     cls_out = cls_out[:, :, 1:2]
             cls_scores.append(cls_out)

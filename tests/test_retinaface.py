@@ -1,5 +1,4 @@
 import numpy as np
-import pytest
 
 from fast_face.models.factory import FaceModelFactory
 
@@ -38,4 +37,3 @@ def test_retinaface_resnet50_batched_inference():
     assert isinstance(results[1], list), (
         "Result should be a list of dicts when return_dict=True"
     )
-

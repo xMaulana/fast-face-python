@@ -1,6 +1,6 @@
 # Adapted from https://github.com/elliottzheng/batch-face
 from math import ceil
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
 import cv2
 import numpy as np

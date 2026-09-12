@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
-import os
 import cv2
 import numpy as np
 import onnxruntime as ort

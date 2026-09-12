@@ -1,6 +1,3 @@
-import os
-from typing import List, Optional
-
 import numpy as np
 import onnxruntime as ort
 

@@ -1,5 +1,4 @@
 import numpy as np
-import pytest
 
 from fast_face.models.factory import FaceModelFactory
 
@@ -125,4 +124,3 @@ def test_adaface_ir101_extract_with_landmarks():
 
     norms = np.linalg.norm(embeddings, axis=1)
     np.testing.assert_allclose(norms, 1.0, atol=1e-5)
-

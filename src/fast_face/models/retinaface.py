@@ -100,9 +100,9 @@ class RetinaFace(BaseFaceModel):
                 results.append(np.empty((0, 15), dtype=np.float32))
                 continue
 
-            dets = np.hstack(
-                (boxes, scores[:, np.newaxis], landmarks)
-            ).astype(np.float32, copy=False)
+            dets = np.hstack((boxes, scores[:, np.newaxis], landmarks)).astype(
+                np.float32, copy=False
+            )
 
             results.append(dets)
 

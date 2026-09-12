@@ -1,5 +1,5 @@
 import os
-from typing import Type, Union
+from typing import Union
 
 from .base import BaseFaceModel
 from .base_recognition import BaseRecognitionModel
@@ -24,7 +24,9 @@ class FaceModelFactory:
     }
 
     @classmethod
-    def get_model(cls, model_type: str, **kwargs) -> Union[BaseFaceModel, BaseRecognitionModel]:
+    def get_model(
+        cls, model_type: str, **kwargs
+    ) -> Union[BaseFaceModel, BaseRecognitionModel]:
         """Get an instance of a face detection or recognition model.
 
         Args:
@@ -40,9 +42,13 @@ class FaceModelFactory:
                 f"Model type '{model_type}' is not supported. Supported models: {list(cls._models.keys())}"
             )
 
-        canonical_filename = MODEL_FILENAMES.get(model_type, f"{model_type.lower()}.onnx")
+        canonical_filename = MODEL_FILENAMES.get(
+            model_type, f"{model_type.lower()}.onnx"
+        )
         if "model_path" not in kwargs:
-            kwargs["model_path"] = os.path.join(os.path.dirname(os.path.abspath(__file__)), canonical_filename)
+            kwargs["model_path"] = os.path.join(
+                os.path.dirname(os.path.abspath(__file__)), canonical_filename
+            )
 
         model_path = kwargs["model_path"]
         if not os.path.exists(model_path):

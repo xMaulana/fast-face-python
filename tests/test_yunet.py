@@ -1,7 +1,4 @@
-import os
-
 import numpy as np
-import pytest
 
 from fast_face.models.factory import FaceModelFactory
 
