@@ -3,30 +3,54 @@ name: Publish to PyPI
 on:
   release:
     types: [published]
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
 
 jobs:
+  test:
+    name: Run tests before publishing
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install ".[dev,cpu]"
+
+      - name: Run test suite
+        run: pytest tests/
+
   pypi-publish:
     name: Upload release to PyPI
+    needs: [test]
     runs-on: ubuntu-latest
     environment:
       name: pypi
       url: https://pypi.org/p/fast-face-python
     permissions:
       id-token: write
-    
+
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: "3.11"
-        
-    - name: Install build tool
-      run: python -m pip install --upgrade pip build
-      
-    - name: Build package
-      run: python -m build
-      
-    - name: Publish package distributions to PyPI
-      uses: pypa/gh-action-pypi-publish@release/v1
+      - uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Install build tool
+        run: python -m pip install --upgrade pip build
+
+      - name: Build package
+        run: python -m build
+
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
