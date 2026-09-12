@@ -115,6 +115,57 @@ landmarks = np.array([
 embeddings = model.extract([img_rgb], landmarks=[landmarks])
 ```
 
+### Execution Providers (Hardware Acceleration)
+
+By default, all models run using CPU (`["CPUExecutionProvider"]`). You can enable hardware acceleration (CUDA, ROCm, OpenVINO, CoreML, etc.) by passing the `providers` argument to `FaceModelFactory.get_model()`:
+
+#### NVIDIA GPU (CUDA)
+
+```python
+model = FaceModelFactory.get_model(
+    "RETINAFACE_RESNET50",
+    providers=["CUDAExecutionProvider", "CPUExecutionProvider"],
+)
+```
+
+#### AMD GPU (ROCm)
+
+```python
+model = FaceModelFactory.get_model(
+    "ADAFACE_IR101",
+    providers=["ROCMExecutionProvider", "CPUExecutionProvider"],
+)
+```
+
+#### Intel OpenVINO
+
+```python
+model = FaceModelFactory.get_model(
+    "YUNET",
+    providers=["OpenVINOExecutionProvider", "CPUExecutionProvider"],
+)
+```
+
+#### Custom Provider Options
+
+You can also pass tuple configurations with custom options (such as device ID or memory limits):
+
+```python
+cuda_provider = (
+    "CUDAExecutionProvider",
+    {
+        "device_id": 0,
+        "arena_extend_strategy": "kNextPowerOfTwo",
+        "gpu_mem_limit": 2 * 1024 * 1024 * 1024,  # 2 GB
+    },
+)
+
+model = FaceModelFactory.get_model(
+    "RETINAFACE_RESNET50",
+    providers=[cuda_provider, "CPUExecutionProvider"],
+)
+```
+
 ### Supported Models
 
 The following model identifiers are supported by `FaceModelFactory`:
