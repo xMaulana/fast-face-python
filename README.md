@@ -6,13 +6,13 @@ Fast and easy face detection using ONNX runtime.
 
 fast-face-python provides a unified interface for running face detection and recognition models using ONNX Runtime. It handles model downloading, preprocessing, inference, and post-processing, including non-maximum suppression for detection and alignment for recognition. 
 
-The library supports batched inference and configurable execution providers such as CPU, CUDA, and OpenVINO.
+The library supports batched inference and configurable execution providers such as CPU, CUDA, ROCm (AMD GPU), and OpenVINO.
 
 ## Features
 
 * Face Detection: YuNet, RetinaFace (MobileNet, ResNet50)
 * Face Recognition: AdaFace (IR18, IR50, IR101)
-* Hardware Acceleration: CPU, CUDA, and OpenVINO support via ONNX Runtime
+* Hardware Acceleration: CPU, CUDA, ROCm (AMD GPU), and OpenVINO support via ONNX Runtime
 * Batched Inference: Process multiple images simultaneously
 * Automatic Model Management: Downloads required ONNX model weights on first use
 
@@ -32,10 +32,16 @@ Install the package using pip:
 pip install fast-face-python
 ```
 
-For GPU support via CUDA 12:
+For NVIDIA GPU support via CUDA 12:
 
 ```bash
 pip install "fast-face-python[gpu]"
+```
+
+For AMD GPU support via ROCm:
+
+```bash
+pip install "fast-face-python[rocm]"
 ```
 
 For OpenVINO support:

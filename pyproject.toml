@@ -31,6 +31,9 @@ gpu = [
 openvino = [
     "onnxruntime-openvino>=1.24.1"
 ]
+rocm = [
+    "onnxruntime-rocm>=1.22.1"
+]
 dev = [
     "pytest",
     "ruff",
