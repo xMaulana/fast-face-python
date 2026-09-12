@@ -3,6 +3,7 @@ from typing import Type
 
 from .base import BaseFaceModel
 from .yunet import YuNet
+from .retinaface import RetinaFace
 from .downloader import download_model
 from ..schema import MODEL_FILENAMES
 
@@ -12,7 +13,8 @@ class FaceModelFactory:
 
     _models = {
         "YUNET": YuNet,
-        # "RETINAFACE": RetinaFace, # To be implemented
+        "RETINAFACE_MOBILENET": RetinaFace,
+        "RETINAFACE_RESNET50": RetinaFace,
         # "SCRFD": SCRFD, # To be implemented
     }
 

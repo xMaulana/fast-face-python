@@ -11,9 +11,7 @@ from ..schema import ProviderType
 class ONNXSession:
     def __init__(
         self,
-        model_path: str = os.path.join(
-            os.path.dirname(os.path.abspath(__file__)), "mobilenet_retinaface.onnx"
-        ),
+        model_path: str,
         providers: list[ProviderType] | None = None,
         sess_options: ort.SessionOptions | None = None,
     ):
