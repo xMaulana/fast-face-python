@@ -13,6 +13,11 @@ For GPU support:
 pip install "fast-face-python[gpu]"
 ```
 
+For OpenVINO support:
+```bash
+pip install "fast-face-python[openvino]"
+```
+
 ## Quick Start
 
 ```python
