@@ -1,6 +1,6 @@
 # fast-face-python
 
-Fast and easy face detection using ONNX runtime.
+Fast and easy face detection and recognition using ONNX runtime.
 
 ## Overview
 
