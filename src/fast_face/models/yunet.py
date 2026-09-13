@@ -1,5 +1,9 @@
+import logging
+
 import cv2
 import numpy as np
+
+logger = logging.getLogger(__name__)
 
 from ..schema import ProviderType
 from .base import BaseFaceModel
@@ -57,6 +61,7 @@ class YuNet(BaseFaceModel):
         self._update_pad_size()
 
     def preprocess(self, imgs: list[np.ndarray]) -> np.ndarray:
+        logger.debug(f"Preprocessing {len(imgs)} images for YuNet")
         preprocessed_imgs = []
         for img in imgs:
             h, w = img.shape[:2]
@@ -137,6 +142,7 @@ class YuNet(BaseFaceModel):
         scores = cls_scores * obj_scores
 
         results = []
+        logger.debug("Decoding and filtering bounding boxes for each image")
         for i in range(batch_size):
             orig_h, orig_w = original_shapes[i][:2]
             scale_factor = min(self._input_w / orig_w, self._input_h / orig_h)

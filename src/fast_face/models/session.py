@@ -1,5 +1,9 @@
+import logging
+
 import numpy as np
 import onnxruntime as ort
+
+logger = logging.getLogger(__name__)
 
 
 from ..schema import ProviderType
@@ -22,6 +26,7 @@ class ONNXSession:
     def process(self, inputs: np.ndarray):
         assert len(inputs.shape) == 4, "Inputs shape length != 4"
         input_name = self.session.get_inputs()[0].name
+        logger.debug(f"Executing ONNX model inference for input shape: {inputs.shape}")
         outputs = self.session.run(None, {input_name: inputs})
         return outputs
 

@@ -1,5 +1,8 @@
+import logging
 from abc import ABC, abstractmethod
 from typing import Any
+
+logger = logging.getLogger(__name__)
 
 import cv2
 import numpy as np
@@ -53,6 +56,7 @@ class BaseFaceModel(ABC):
     ) -> list[np.ndarray | list[dict[str, Any]]]:
         """Run face detection inference on input images."""
         original_shapes = []
+        logger.debug(f"Starting detection on {len(imgs) if isinstance(imgs, list) else 1} images")
         if isinstance(imgs, str):
             imgs = [imgs]
 
@@ -62,12 +66,14 @@ class BaseFaceModel(ABC):
                 if isinstance(item, str):
                     img = cv2.imread(item)
                     if img is None:
+                        logger.error(f"Could not load image from {item}")
                         raise ValueError(f"Could not load image from {item}")
                     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
                 else:
                     img = item
                 original_shapes.append(img.shape)
                 raw_imgs.append(img)
+            logger.debug(f"Preprocessing {len(raw_imgs)} images from list")
             preprocessed_imgs = self.preprocess(raw_imgs)
         else:
             if len(imgs.shape) == 3:  # (H, W, C)
@@ -83,8 +89,10 @@ class BaseFaceModel(ABC):
         _, _, h, w = preprocessed_imgs.shape
         preprocessed_shape = (h, w)
 
+        logger.debug(f"Running ONNX session inference on shape {preprocessed_imgs.shape}")
         outputs = self.session(preprocessed_imgs)
 
+        logger.debug("Running post-processing")
         batch_dets = self.post_process(outputs, original_shapes, preprocessed_shape)
 
         results = []
@@ -105,4 +113,5 @@ class BaseFaceModel(ABC):
                 dets = [parse_det(x) for x in dets]
             results.append(dets)
 
+        logger.info(f"Detection completed. Found faces in {sum(len(d) > 0 for d in results)}/{len(results)} images")
         return results

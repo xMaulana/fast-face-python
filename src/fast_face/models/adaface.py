@@ -1,4 +1,7 @@
+import logging
 from typing import Any
+
+logger = logging.getLogger(__name__)
 
 import cv2
 import numpy as np
@@ -39,6 +42,7 @@ class AdaFace(BaseRecognitionModel):
 
             h, w = bgr.shape[:2]
             if (w, h) != self.align_size:
+                logger.debug(f"Resizing from {(w, h)} to {self.align_size}")
                 bgr = cv2.resize(bgr, self.align_size)
 
             processed.append(bgr)
@@ -71,15 +75,21 @@ class AdaFace(BaseRecognitionModel):
         if isinstance(imgs, np.ndarray) and imgs.ndim == 3:
             imgs = [imgs]
 
+        logger.info(f"Extracting embeddings for {len(imgs)} face(s)")
         if landmarks is not None:
+            logger.debug("Aligning faces using provided landmarks")
             aligned_imgs = []
             for img, lmk in zip(imgs, landmarks):
                 aligned = align_face(img, lmk, align_size=self.align_size)
                 aligned_imgs.append(aligned)
         else:
+            logger.debug("No landmarks provided, assuming faces are already aligned")
             aligned_imgs = imgs
 
+        logger.debug("Preprocessing images for AdaFace")
         batch = self.preprocess(aligned_imgs)
+        
+        logger.debug("Running ONNX session inference")
         outputs = self.session(batch)
 
         embeddings = outputs[0]

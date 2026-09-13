@@ -1,5 +1,8 @@
+import logging
 from abc import ABC, abstractmethod
 from typing import Any
+
+logger = logging.getLogger(__name__)
 
 import numpy as np
 import onnxruntime as ort
@@ -20,6 +23,7 @@ class BaseRecognitionModel(ABC):
         if providers is None:
             providers = ["CPUExecutionProvider"]
 
+        logger.debug(f"Initializing {self.__class__.__name__} ONNX session with {providers}")
         self.session = ONNXSession(
             model_path=model_path, providers=providers, sess_options=sess_options
         )

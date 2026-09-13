@@ -1,13 +1,16 @@
+import logging
 import os
-from typing import Union
+from typing import Any, Literal, Union, overload
 
+from ..schema import MODEL_FILENAMES
+from .adaface import AdaFace
 from .base import BaseFaceModel
 from .base_recognition import BaseRecognitionModel
-from .yunet import YuNet
-from .retinaface import RetinaFace
-from .adaface import AdaFace
 from .downloader import download_model
-from ..schema import MODEL_FILENAMES
+from .retinaface import RetinaFace
+from .yunet import YuNet
+
+logger = logging.getLogger(__name__)
 
 
 class FaceModelFactory:
@@ -23,9 +26,45 @@ class FaceModelFactory:
         # "SCRFD": SCRFD, # To be implemented
     }
 
+    @overload
+    @classmethod
+    def get_model(cls, model_type: Literal["YUNET", "yunet"], **kwargs: Any) -> YuNet: ...
+
+    @overload
     @classmethod
     def get_model(
-        cls, model_type: str, **kwargs
+        cls,
+        model_type: Literal[
+            "RETINAFACE_MOBILENET",
+            "retinaface_mobilenet",
+            "RETINAFACE_RESNET50",
+            "retinaface_resnet50",
+        ],
+        **kwargs: Any,
+    ) -> RetinaFace: ...
+
+    @overload
+    @classmethod
+    def get_model(
+        cls,
+        model_type: Literal[
+            "ADAFACE_IR101",
+            "adaface_ir101",
+            "ADAFACE_IR50",
+            "adaface_ir50",
+            "ADAFACE_IR18",
+            "adaface_ir18",
+        ],
+        **kwargs: Any,
+    ) -> AdaFace: ...
+
+    @overload
+    @classmethod
+    def get_model(cls, model_type: str, **kwargs: Any) -> Union[BaseFaceModel, BaseRecognitionModel]: ...
+
+    @classmethod
+    def get_model(
+        cls, model_type: str, **kwargs: Any
     ) -> Union[BaseFaceModel, BaseRecognitionModel]:
         """Get an instance of a face detection or recognition model.
 

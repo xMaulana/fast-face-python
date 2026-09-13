@@ -1,5 +1,9 @@
+import logging
+
 import cv2
 import numpy as np
+
+logger = logging.getLogger(__name__)
 
 from ..schema import ProviderType
 from ..tools import decode, decode_landmark, get_priorbox
@@ -49,6 +53,7 @@ class RetinaFace(BaseFaceModel):
 
     def preprocess(self, imgs: list[np.ndarray]) -> np.ndarray:
         """Preprocess images: resize, normalize, transpose to NCHW."""
+        logger.debug(f"Preprocessing {len(imgs)} images for RetinaFace")
         processed = []
         for img in imgs:
             resized = self._resize_single(img)
@@ -75,6 +80,7 @@ class RetinaFace(BaseFaceModel):
         h, w = preprocessed_shape
         prior_data = get_priorbox(image_size=(h, w))
 
+        logger.debug("Decoding RetinaFace output bounding boxes and landmarks")
         results = []
         for i in range(loc.shape[0]):
             orig_h, orig_w = original_shapes[i][:2]
