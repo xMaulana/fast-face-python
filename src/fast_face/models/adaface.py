@@ -1,14 +1,14 @@
-import logging
-from typing import Any
-
-logger = logging.getLogger(__name__)
-
 import cv2
 import numpy as np
+import logging
+from typing import Any
 
 from ..schema import ProviderType
 from ..tools import align_face
 from .base_recognition import BaseRecognitionModel
+
+logger = logging.getLogger(__name__)
+
 
 
 class AdaFace(BaseRecognitionModel):

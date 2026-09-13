@@ -2,14 +2,13 @@ import logging
 from abc import ABC, abstractmethod
 from typing import Any
 
-logger = logging.getLogger(__name__)
-
 import numpy as np
 import onnxruntime as ort
 
 from ..schema import ProviderType
 from .session import ONNXSession
 
+logger = logging.getLogger(__name__)
 
 class BaseRecognitionModel(ABC):
     """Base class for face recognition models that extract embeddings."""

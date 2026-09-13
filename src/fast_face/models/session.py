@@ -3,11 +3,9 @@ import logging
 import numpy as np
 import onnxruntime as ort
 
-logger = logging.getLogger(__name__)
-
-
 from ..schema import ProviderType
 
+logger = logging.getLogger(__name__)
 
 class ONNXSession:
     def __init__(

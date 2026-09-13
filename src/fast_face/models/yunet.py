@@ -3,11 +3,10 @@ import logging
 import cv2
 import numpy as np
 
-logger = logging.getLogger(__name__)
-
 from ..schema import ProviderType
 from .base import BaseFaceModel
 
+logger = logging.getLogger(__name__)
 
 class YuNet(BaseFaceModel):
     OUTPUT_NAMES = [

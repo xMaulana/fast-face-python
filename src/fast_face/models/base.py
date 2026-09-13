@@ -2,7 +2,6 @@ import logging
 from abc import ABC, abstractmethod
 from typing import Any
 
-logger = logging.getLogger(__name__)
 
 import cv2
 import numpy as np
@@ -12,6 +11,7 @@ from ..schema import ProviderType
 from ..tools import nms, parse_det
 from .session import ONNXSession
 
+logger = logging.getLogger(__name__)
 
 class BaseFaceModel(ABC):
     def __init__(

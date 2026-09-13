@@ -3,12 +3,11 @@ import logging
 import cv2
 import numpy as np
 
-logger = logging.getLogger(__name__)
-
 from ..schema import ProviderType
 from ..tools import decode, decode_landmark, get_priorbox
 from .base import BaseFaceModel
 
+logger = logging.getLogger(__name__)
 
 class RetinaFace(BaseFaceModel):
     """RetinaFace detector supporting MobileNet and ResNet50 backbones."""
